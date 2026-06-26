@@ -12,7 +12,7 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   GEMINI_API_KEY: z.string().min(1, 'GEMINI_API_KEY is required'),
-  CLIENT_URL: z.string().default('http://localhost:3000'),
+  CLIENT_URL: z.string().default('http://localhost:3000').transform((url) => url.replace(/\/+$/, '')),
   // Optional — enables Google login when present
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),

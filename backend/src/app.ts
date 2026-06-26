@@ -7,6 +7,8 @@ import { httpLogger } from './lib/logger';
 import { generalLimiter } from './middleware/rateLimiter';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
+const normalizeOrigin = (origin: string) => origin.replace(/\/+$/, '');
+
 // Route imports
 import authRoutes, { userRouter } from './modules/auth/auth.routes';
 import kanaRoutes from './modules/kana/kana.routes';
@@ -22,7 +24,15 @@ const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: env.CLIENT_URL,
+  origin: (requestOrigin, callback) => {
+    if (!requestOrigin) return callback(null, true);
+    const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
+    const allowedOrigin = normalizeOrigin(env.CLIENT_URL);
+    if (normalizedRequestOrigin === allowedOrigin) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS origin denied: ${requestOrigin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
