@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authApi } from '@/lib/api';
@@ -12,11 +12,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [config, setConfig] = useState({ googleAuthEnabled: false, emailOtpEnabled: false });
-
-  useEffect(() => {
-    authApi.getConfig().then((res: any) => setConfig(res.data)).catch(() => {});
-  }, []);
+  const googleAuthEnabled = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,7 +90,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {config.googleAuthEnabled && (
+          {googleAuthEnabled && (
             <div style={{ marginTop: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
