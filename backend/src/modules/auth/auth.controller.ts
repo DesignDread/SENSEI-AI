@@ -8,8 +8,8 @@ import { User } from '../../models/User';
 
 const COOKIE_OPTS = {
   httpOnly: true,
-  secure: env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
+  secure: true,
+  sameSite: 'none' as const,
 };
 
 const setTokenCookies = (res: Response, accessToken: string, refreshToken: string) => {

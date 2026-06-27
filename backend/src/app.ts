@@ -21,6 +21,7 @@ import dashboardRoutes from './modules/dashboard/dashboard.routes';
 import { aiRouter } from './ai/orchestrator';
 
 const app = express();
+app.set('trust proxy', 1);
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
